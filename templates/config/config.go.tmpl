@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"{{.ModName}}/internal/logger"
 )
 
 func Init() {
@@ -12,7 +13,7 @@ func Init() {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Println("No config file found; using defaults.")
+		logger.Log.Info("No config file found; using defaults.")
 	}
 
 	viper.SetDefault("app.theme", "dark")

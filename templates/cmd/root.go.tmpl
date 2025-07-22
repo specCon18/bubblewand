@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 	"{{.ModName}}/tui"
+	"{{.ModName}}/internal/logger"
 )
 
 var rootCmd = &cobra.Command{
@@ -13,7 +13,7 @@ var rootCmd = &cobra.Command{
 	Short: "{{.PackageName}}, {{.ProgramDesc}}",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := tui.Run(); err != nil {
-			fmt.Println("Error:", err)
+			logger.Log.Errorf("Error: %s", err)
 			os.Exit(1)
 		}
 	},
