@@ -1,0 +1,28 @@
+package cmd
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+	"{{.ModName}}/tui"
+)
+
+var rootCmd = &cobra.Command{
+	Use:   "{{.PackageName}}",
+	Short: "{{.PackageName}}, {{.ProgramDesc}}",
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := tui.Run(); err != nil {
+			fmt.Println("Error:", err)
+			os.Exit(1)
+		}
+	},
+}
+
+func Execute() {
+	cobra.CheckErr(rootCmd.Execute())
+}
+
+func init() {
+	rootCmd.AddCommand(versionCmd)
+}
