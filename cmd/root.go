@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"specCon18/bubblewand/internal/render"
 	"specCon18/bubblewand/internal/logger"
+	"github.com/charmbracelet/log"
 
 )
 
@@ -14,6 +15,7 @@ var (
 	programVersion string
 	programDesc    string
 	outputDir      string 
+	logLevel       string
 )
 
 // rootCmd renders templates using CLI flags
@@ -36,10 +38,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
-// Execute starts the CLI application
-func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
-}
+
 
 func init() {
 	// Register flags
@@ -48,7 +47,7 @@ func init() {
 	rootCmd.Flags().StringVar(&programVersion, "program-version", "", "Program version")
 	rootCmd.Flags().StringVar(&programDesc, "program-desc", "", "Program description")
 	rootCmd.Flags().StringVarP(&outputDir, "output", "o", "output", "Output directory for rendered files")
-
+        rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
 	// Mark required
 	rootCmd.MarkFlagRequired("mod-name")
 	rootCmd.MarkFlagRequired("package-name")
@@ -56,3 +55,16 @@ func init() {
 	rootCmd.MarkFlagRequired("program-desc")
 }
 
+func initLogging() {
+	level, err := log.ParseLevel(logLevel)
+	if err != nil {
+		logger.Log.Warn("Invalid log level; defaulting to info", "input", logLevel)
+		level = log.InfoLevel
+	}
+	logger.Log.SetLevel(level)
+}
+
+// Execute starts the CLI application
+func Execute() {
+	cobra.CheckErr(rootCmd.Execute())
+}
