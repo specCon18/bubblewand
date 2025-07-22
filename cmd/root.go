@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"specCon18/wand-templater/render"
+	"specCon18/bubblewand/render"
 )
 
 // CLI flag variables
@@ -18,8 +18,8 @@ var (
 
 // rootCmd renders templates using CLI flags
 var rootCmd = &cobra.Command{
-	Use:   "wand-templater",
-    	Short: "A tool to generate a go project template for building a terminal application with bubbletea + cobra + viper + log + mango",
+	Use:   "bubblewand",
+    	Short: "A tool to generate a go project template for building a terminal application with bubbletea + cobra + viper + log",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Fill ProgramData from CLI input
 		data := render.ProgramData{

@@ -1,5 +1,4 @@
-module specCon18/wand-templater
-
+module specCon18/bubblewand
 go 1.23.11
 
 require (

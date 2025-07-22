@@ -1,7 +1,7 @@
 package main
 
 import (
-	"specCon18/wand-templater/cmd"
+	"specCon18/bubblewand/cmd"
 )
 
 func main() {

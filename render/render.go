@@ -14,6 +14,7 @@ type ProgramData struct {
 	PackageName    string
 	ProgramVersion string
 	ProgramDesc    string
+	OutputDir      string
 }
 
 // RenderTemplates renders all .tmpl files from the templates/ directory into outputDir
