@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
-	"specCon18/bubblewand/render"
+	"specCon18/bubblewand/internal/render"
+	"specCon18/bubblewand/internal/logger"
 )
 
 // tuiCmd renders templates interactively via a form
@@ -28,12 +27,12 @@ var tuiCmd = &cobra.Command{
 
 		// Run the form and exit on cancel
 		if err := form.Run(); err != nil {
-			log.Fatalf("form cancelled or failed: %v", err)
+			logger.Log.Fatalf("form cancelled or failed: %v", err)
 		}
 
 		// Render templates with user input
 		if err := render.RenderTemplates(data, data.OutputDir); err != nil {
-			log.Fatalf("rendering failed: %v", err)
+			logger.Log.Fatalf("rendering failed: %v", err)
 		}
 	},
 }

@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
-	"specCon18/bubblewand/render"
+	"specCon18/bubblewand/internal/render"
+	"specCon18/bubblewand/internal/logger"
+
 )
 
 // CLI flag variables
@@ -13,7 +13,7 @@ var (
 	packageName    string
 	programVersion string
 	programDesc    string
-	outputDir      string // NEW: output directory flag
+	outputDir      string 
 )
 
 // rootCmd renders templates using CLI flags
@@ -31,7 +31,7 @@ var rootCmd = &cobra.Command{
 
 		// Render templates to the specified output directory
 		if err := render.RenderTemplates(data, outputDir); err != nil {
-			log.Fatalf("rendering failed: %v", err)
+			logger.Log.Fatalf("rendering failed: %v",err)
 		}
 	},
 }

@@ -1,11 +1,12 @@
 package render
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+	"specCon18/bubblewand/internal/logger"
 )
 
 // ProgramData holds user-supplied template values
@@ -50,8 +51,9 @@ func RenderTemplates(data ProgramData, outputDir string) error {
 			return err
 		}
 		defer outFile.Close()
-
-		log.Printf("Rendering %s → %s\n", path, outputPath)
+		
+		logString := fmt.Sprintf("Rendering %s → %s\n", path, outputPath)
+		logger.Log.Info(logString)
 		return tmpl.Execute(outFile, data)
 	})
 }
