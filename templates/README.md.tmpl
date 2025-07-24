@@ -2,3 +2,35 @@
 
 ## TLDR;
 {{.ProgramDesc}}
+
+
+## Getting started
+
+- make sure you have [nix](https://nixos.org/download/) and [direnv](https://direnv.net/) installed
+- run `direnv allow`
+- start coding in your desired editor
+
+### Project structure
+./
+├── cmd
+│   ├── root.go -> the entrypoint for your cli
+│   └── version.go -> an example sub command
+├── config
+│   └── config.go -> viper configuration init
+├── flake.nix -> project flake for packaging and devshell
+├── go.mod -> go module config
+├── go.sum
+├── internal
+│   └── logger
+│       └── logger.go -> charmbracelet/log logger init
+├── justfile -> rusty makefile used to ease development environment commands
+├── main.go -> app entrypoint
+├── README.md -> YOU ARE HERE.
+└── tui
+    ├── model.go -> bubbletea model data goes here
+    ├── run.go -> tui entrypoint
+    ├── update.go -> bubbletea model update functions go here
+    └── view.go -> bubbletea view functions go here
+
+### Generating sub-commands
+use cobra-cli to generate sub-commands
