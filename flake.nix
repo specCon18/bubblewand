@@ -45,7 +45,7 @@
                 name = "source";
                 path = ./.;
               };
-              vendorHash = "sha256-SQHzChRwEx8VYJwXcZXTMDgILrhhRvGqrdQ1k3lFWgk=";
+              vendorHash = "sha256-LiZpXScjA9i3hW80zEr6I2YzLud8ob0YiQWbxziP9YY=";
             }
           ) { };
         }
