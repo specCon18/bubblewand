@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"{{.ModName}}/tui"
+	"{{.ModName}}/config"
 	"{{.ModName}}/internal/logger"
 )
 
@@ -20,6 +21,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	config.Init()
 	cobra.CheckErr(rootCmd.Execute())
 }
 
