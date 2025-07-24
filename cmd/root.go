@@ -16,6 +16,7 @@ var (
 	programDesc    string
 	outputDir      string 
 	logLevel       string
+	verbose	       bool
 )
 
 // rootCmd renders templates using CLI flags
@@ -23,19 +24,23 @@ var rootCmd = &cobra.Command{
 	Use:   "bubblewand",
     	Short: "A tool to generate a go project template for building a terminal application with bubbletea + cobra + viper + log",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Fill ProgramData from CLI input
-		data := render.ProgramData{
-			ModName:        modName,
-			PackageName:    packageName,
-			ProgramVersion: programVersion,
-			ProgramDesc:    programDesc,
-		}
+        	// Initialize logging with log level and flags
+        	initLogging()
 
-		// Render templates to the specified output directory
-		if err := render.RenderTemplates(data, outputDir); err != nil {
-			logger.Log.Fatalf("rendering failed: %v",err)
-		}
+        	// Fill ProgramData from CLI input
+        	data := render.ProgramData{
+                	ModName:        modName,
+                	PackageName:    packageName,
+                	ProgramVersion: programVersion,
+                	ProgramDesc:    programDesc,
+        	}
+
+       		// Render templates to the specified output directory
+        	if err := render.RenderTemplates(data, outputDir, verbose); err != nil {
+                	logger.Log.Fatalf("rendering failed: %v", err)
+        	}
 	},
+
 }
 
 
@@ -48,6 +53,7 @@ func init() {
 	rootCmd.Flags().StringVar(&programDesc, "program-desc", "", "Program description")
 	rootCmd.Flags().StringVarP(&outputDir, "output", "o", "output", "Output directory for rendered files")
         rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose output")
 	// Mark required
 	rootCmd.MarkFlagRequired("mod-name")
 	rootCmd.MarkFlagRequired("package-name")

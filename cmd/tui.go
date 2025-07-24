@@ -31,7 +31,7 @@ var tuiCmd = &cobra.Command{
 		}
 
 		// Render templates with user input
-		if err := render.RenderTemplates(data, data.OutputDir); err != nil {
+		if err := render.RenderTemplates(data, data.OutputDir, verbose); err != nil {
 			logger.Log.Fatalf("rendering failed: %v", err)
 		}
 	},
