@@ -62,6 +62,7 @@
               go_1_23
 	      gopls
               nixpkgs-fmt
+	      cobra-cli
             ];
             env = {
               CGO_ENABLED = "1";
