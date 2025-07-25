@@ -1,71 +1,77 @@
 package render
 
 import (
-        "os"
-        "path/filepath"
-        "strings"
-        "text/template"
-        "specCon18/bubblewand/internal/logger"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
+
+	"specCon18/bubblewand/embed"
+	"specCon18/bubblewand/internal/logger"
 )
 
 // ProgramData holds user-supplied template values
 type ProgramData struct {
-        ModName        string
-        PackageName    string
-        ProgramVersion string
-        ProgramDesc    string
-        OutputDir      string
+	ModName        string
+	PackageName    string
+	ProgramVersion string
+	ProgramDesc    string
+	OutputDir      string
 }
 
-// RenderTemplates renders all .tmpl files from the templates/ directory into outputDir
+// RenderTemplates renders embedded .tmpl files into outputDir
 func RenderTemplates(data ProgramData, outputDir string, verbose bool) error {
-        var renderedFiles int
+	var renderedFiles int
 
-        err := filepath.Walk("templates", func(path string, info os.FileInfo, err error) error {
-                if err != nil {
-                        return err
-                }
-                if info.IsDir() || !strings.HasSuffix(info.Name(), ".tmpl") {
-                        return nil
-                }
+	err := fs.WalkDir(embed.Templates, "templates", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() || !strings.HasSuffix(d.Name(), ".tmpl") {
+			return nil
+		}
 
-                relPath, err := filepath.Rel("templates", path)
-                if err != nil {
-                        return err
-                }
-                outputPath := filepath.Join(outputDir, strings.TrimSuffix(relPath, ".tmpl"))
+		// Get relative path inside templates/
+		relPath := strings.TrimPrefix(path, "templates/")
+		outputPath := filepath.Join(outputDir, strings.TrimSuffix(relPath, ".tmpl"))
 
-                if err := os.MkdirAll(filepath.Dir(outputPath), 0755); err != nil {
-                        return err
-                }
+		if err := os.MkdirAll(filepath.Dir(outputPath), 0755); err != nil {
+			return err
+		}
 
-                tmpl, err := template.ParseFiles(path)
-                if err != nil {
-                        return err
-                }
+		tmplBytes, err := embed.Templates.ReadFile(path)
+		if err != nil {
+			return err
+		}
 
-                outFile, err := os.Create(outputPath)
-                if err != nil {
-                        return err
-                }
-                defer outFile.Close()
+		tmpl, err := template.New(d.Name()).Parse(string(tmplBytes))
+		if err != nil {
+			return err
+		}
 
-                if verbose {
-                        logger.Log.Infof("Rendering %s → %s", path, outputPath)
-                }
+		outFile, err := os.Create(outputPath)
+		if err != nil {
+			return err
+		}
+		defer outFile.Close()
 
-                renderedFiles++
-                return tmpl.Execute(outFile, data)
-        })
+		if verbose {
+			logger.Log.Infof("Rendering %s → %s", path, outputPath)
+		}
 
-        if err != nil {
-                return err
-        }
+		renderedFiles++
+		return tmpl.Execute(outFile, data)
+	})
 
-        if !verbose && renderedFiles > 0 {
-                logger.Log.Info("Rendering templates")
-        }
+	if err != nil {
+		return err
+	}
 
-        return nil
+	if !verbose && renderedFiles > 0 {
+		logger.Log.Info("Rendering templates")
+	}
+
+	return nil
 }
 

@@ -16,11 +16,4 @@ func init() {
 		Level:           log.InfoLevel,
 	})
 }
-func initLogging() {
-	level, err := log.ParseLevel(logLevel)
-	if err != nil {
-		Log.Warn("Invalid log level; defaulting to info", "input", logLevel)
-		level = log.InfoLevel
-	}
-	Log.SetLevel(level)
-}
+
