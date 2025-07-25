@@ -40,7 +40,7 @@
             { buildGoModule }:
             buildGoModule {
               pname = "bubblewand";
-              version = "0.0.1";
+              version = "1.0.0";
               src = builtins.path {
                 name = "source";
                 path = ./.;
